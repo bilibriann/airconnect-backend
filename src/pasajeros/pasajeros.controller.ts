@@ -18,7 +18,7 @@ export class PasajerosController {
   constructor(private readonly pasajerosService: PasajerosService) {}
 
   @Post()
-  create(@Body() createPasajeroDto: CreatePasajeroDto): Pasajero {
+  registrar(@Body() createPasajeroDto: CreatePasajeroDto): Pasajero {
     return this.pasajerosService.create(createPasajeroDto);
   }
 
@@ -33,7 +33,7 @@ export class PasajerosController {
   }
 
   @Delete(':id')
-  eliminar(@Param('id', ParseIntPipe) id: number): boolean {
-    return this.pasajerosService.eliminar(id);
+  eliminar(@Param('id', ParseIntPipe) id: number): void {
+    this.pasajerosService.eliminar(id);
   }
 }
