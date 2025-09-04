@@ -1,3 +1,6 @@
+
+
+
 import { Vuelo } from './entities/vuelo.entity';
 import { AeropuertosService } from '../aeropuertos/aeropuertos.service';
 import { CreateVueloDto } from './dto/create-vuelo.dto';
@@ -69,5 +72,6 @@ export class VuelosService {
     const vuelo = this.obtenerPorId(id);
     vuelo.estado = dto.estado;
     return vuelo;
+
   }
 }

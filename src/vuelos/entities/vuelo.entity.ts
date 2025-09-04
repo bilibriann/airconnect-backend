@@ -1,3 +1,4 @@
+
 export class Vuelo {
   id: number;
   numeroVuelo: string;
@@ -7,3 +8,4 @@ export class Vuelo {
   destino: string;
   estado: 'Programado' | 'En vuelo' | 'Aterrizado' | 'Cancelado';
 }
+

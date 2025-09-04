@@ -1,3 +1,4 @@
+
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAeropuertoDto {
@@ -10,3 +11,4 @@ export class CreateAeropuertoDto {
   @ApiProperty({ example: 'Santiago' })
   ciudad: string;
 }
+

@@ -1,4 +1,5 @@
-import {
+
+import { UpdateVueloDto } from './dto/update-vuelo.dto';
   Body,
   Controller,
   Get,
@@ -15,11 +16,11 @@ import { Vuelo } from './entities/vuelo.entity';
 import { UpdateEstadoVueloDto } from './dto/update-estado-vuelo.dto';
 
 @ApiTags('vuelos')
+
 @Controller('vuelos')
 export class VuelosController {
   constructor(private readonly vuelosService: VuelosService) {}
 
-  @Post()
   create(@Body() dto: CreateVueloDto) {
     return this.vuelosService.create(dto);
   }
@@ -43,5 +44,6 @@ export class VuelosController {
     @Body() dto: UpdateEstadoVueloDto,
   ): Vuelo {
     return this.vuelosService.actualizarEstado(id, dto);
+
   }
 }

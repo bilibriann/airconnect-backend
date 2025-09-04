@@ -1,3 +1,4 @@
+
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePasajeroDto {
@@ -10,3 +11,4 @@ export class CreatePasajeroDto {
   @ApiProperty({ example: 'brian@vilches.com' })
   email: string;
 }
+

@@ -1,4 +1,5 @@
-import {
+
+import { UpdatePasajeroDto } from './dto/update-pasajero.dto';
   Body,
   Controller,
   Delete,
@@ -13,11 +14,11 @@ import { CreatePasajeroDto } from './dto/create-pasajero.dto';
 import { Pasajero } from './entities/pasajero.entity';
 
 @ApiTags('pasajeros')
+
 @Controller('pasajeros')
 export class PasajerosController {
   constructor(private readonly pasajerosService: PasajerosService) {}
 
-  @Post()
   registrar(@Body() createPasajeroDto: CreatePasajeroDto): Pasajero {
     return this.pasajerosService.create(createPasajeroDto);
   }
@@ -35,5 +36,6 @@ export class PasajerosController {
   @Delete(':id')
   eliminar(@Param('id', ParseIntPipe) id: number): void {
     this.pasajerosService.eliminar(id);
+
   }
 }

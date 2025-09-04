@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
+
+import { CreatePasajeroDto } from './dto/create-pasajero.dto';
+import { UpdatePasajeroDto } from './dto/update-pasajero.dto';
 import { Pasajero } from './entities/pasajero.entity';
 import { CreatePasajeroDto } from './dto/create-pasajero.dto';
 
@@ -41,5 +44,6 @@ export class PasajerosService {
     }
     this.pasajeros.splice(index, 1);
     return true;
+
   }
 }
