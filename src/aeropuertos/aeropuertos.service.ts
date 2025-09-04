@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
+import { Aeropuerto } from './entities/aeropuerto.entity';
 import { CreateAeropuertoDto } from './dto/create-aeropuerto.dto';
-import { UpdateAeropuertoDto } from './dto/update-aeropuerto.dto';
 
 @Injectable()
 export class AeropuertosService {
-  create(createAeropuertoDto: CreateAeropuertoDto) {
-    return 'This action adds a new aeropuerto';
+  private aeropuertos: Aeropuerto[] = [];
+  private seq = 1;
+
+  create(dto: CreateAeropuertoDto): Aeropuerto {
+    const existe = this.aeropuertos.some(
+      (a) => a.codigo.toUpperCase() === dto.codigo.toUpperCase(),
+    );
+    if (existe) {
+      throw new Error('El aeropuerto ya existe');
+    }
+    const aeropuerto: Aeropuerto = {
+      id: this.seq++,
+      codigo: dto.codigo,
+      nombre: dto.nombre,
+      ciudad: dto.ciudad,
+    };
+    this.aeropuertos.push(aeropuerto);
+    return aeropuerto;
+  }
+  obtenerAeropuertoPorId(id: number): Aeropuerto | undefined {
+    const aeropuerto = this.aeropuertos.find((a) => a.id === id);
+    if (!aeropuerto) {
+      throw new Error('Aeropuerto no encontrado');
+    }
+    return aeropuerto;
+  }
+  obtenerTodosLosAeropuertos(): Aeropuerto[] {
+    return this.aeropuertos;
   }
 
-  findAll() {
-    return `This action returns all aeropuertos`;
-  }
+  buscarPorCodigo(codigo: string): Aeropuerto | undefined {
+    return this.aeropuertos.find(
+      (a) => a.codigo.toUpperCase() === codigo.toUpperCase(),
+    );
 
-  findOne(id: number) {
-    return `This action returns a #${id} aeropuerto`;
-  }
-
-  update(id: number, updateAeropuertoDto: UpdateAeropuertoDto) {
-    return `This action updates a #${id} aeropuerto`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} aeropuerto`;
   }
 }

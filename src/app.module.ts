@@ -8,6 +8,11 @@ import { ReservasModule } from './reservas/reservas.module';
 
 @Module({
   imports: [AeropuertosModule, PasajerosModule, VuelosModule, ReservasModule],
+=======
+import { PasajerosModule } from './pasajeros/pasajeros.module';
+import { VuelosModule } from './vuelos/vuelos.module';
+import { AeropuertosModule } from './aeropuertos/aeropuertos.module';
+
   controllers: [AppController],
   providers: [AppService],
 })

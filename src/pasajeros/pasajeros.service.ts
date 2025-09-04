@@ -1,26 +1,49 @@
 import { Injectable } from '@nestjs/common';
+
 import { CreatePasajeroDto } from './dto/create-pasajero.dto';
 import { UpdatePasajeroDto } from './dto/update-pasajero.dto';
+import { Pasajero } from './entities/pasajero.entity';
+import { CreatePasajeroDto } from './dto/create-pasajero.dto';
 
 @Injectable()
 export class PasajerosService {
-  create(createPasajeroDto: CreatePasajeroDto) {
-    return 'This action adds a new pasajero';
+  private pasajeros: Pasajero[] = [];
+  private seq = 1;
+
+  create(dot: CreatePasajeroDto): Pasajero {
+    const existe = this.pasajeros.some(
+      (pasajero) => pasajero.email === dot.email,
+    );
+    if (existe) {
+      throw new Error('El pasajero ya existe');
+    }
+    const pasajero: Pasajero = {
+      id: this.seq++,
+      ...dot,
+    };
+    this.pasajeros.push(pasajero);
+    return pasajero;
   }
 
-  findAll() {
-    return `This action returns all pasajeros`;
+  obtenerPorId(id: number): Pasajero {
+    const pasajero = this.pasajeros.find((p) => p.id === id);
+    if (!pasajero) {
+      throw new Error('Pasajero no encontrado');
+    }
+    return pasajero;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pasajero`;
+  obtenerTodos(): Pasajero[] {
+    return this.pasajeros;
   }
 
-  update(id: number, updatePasajeroDto: UpdatePasajeroDto) {
-    return `This action updates a #${id} pasajero`;
-  }
+  eliminar(id: number): boolean {
+    const index = this.pasajeros.findIndex((p) => p.id === id);
+    if (index === -1) {
+      throw new Error('Pasajero no encontrado');
+    }
+    this.pasajeros.splice(index, 1);
+    return true;
 
-  remove(id: number) {
-    return `This action removes a #${id} pasajero`;
   }
 }

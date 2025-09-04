@@ -1,42 +1,49 @@
-import {
+
+import { UpdateVueloDto } from './dto/update-vuelo.dto';
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VuelosService } from './vuelos.service';
 import { CreateVueloDto } from './dto/create-vuelo.dto';
-import { UpdateVueloDto } from './dto/update-vuelo.dto';
+import { Vuelo } from './entities/vuelo.entity';
+import { UpdateEstadoVueloDto } from './dto/update-estado-vuelo.dto';
+
+@ApiTags('vuelos')
 
 @Controller('vuelos')
 export class VuelosController {
   constructor(private readonly vuelosService: VuelosService) {}
 
-  @Post()
-  create(@Body() createVueloDto: CreateVueloDto) {
-    return this.vuelosService.create(createVueloDto);
+  create(@Body() dto: CreateVueloDto) {
+    return this.vuelosService.create(dto);
   }
-
-  @Get()
-  findAll() {
-    return this.vuelosService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.vuelosService.findOne(+id);
+  obtenerPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.vuelosService.obtenerPorId(id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVueloDto: UpdateVueloDto) {
-    return this.vuelosService.update(+id, updateVueloDto);
+  @Get()
+  @ApiQuery({ name: 'origen', required: false })
+  @ApiQuery({ name: 'estado', required: false, enum: ['Programado'] })
+  obtenerTodos(
+    @Query('origen') origen: string,
+    @Query('estado')
+    estado: 'Programado' | 'Aterrizado' | 'En vuelo' | 'Cancelado',
+  ): Vuelo[] {
+    return this.vuelosService.obtenerTodos({ origen, estado });
   }
+  @Patch(':id/estado')
+  actualizarEstado(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateEstadoVueloDto,
+  ): Vuelo {
+    return this.vuelosService.actualizarEstado(id, dto);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vuelosService.remove(+id);
   }
 }

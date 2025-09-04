@@ -1,45 +1,41 @@
-import {
-  Controller,
-  Get,
-  Post,
+
+import { UpdatePasajeroDto } from './dto/update-pasajero.dto';
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { PasajerosService } from './pasajeros.service';
 import { CreatePasajeroDto } from './dto/create-pasajero.dto';
-import { UpdatePasajeroDto } from './dto/update-pasajero.dto';
+import { Pasajero } from './entities/pasajero.entity';
+
+@ApiTags('pasajeros')
 
 @Controller('pasajeros')
 export class PasajerosController {
   constructor(private readonly pasajerosService: PasajerosService) {}
 
-  @Post()
-  create(@Body() createPasajeroDto: CreatePasajeroDto) {
+  registrar(@Body() createPasajeroDto: CreatePasajeroDto): Pasajero {
     return this.pasajerosService.create(createPasajeroDto);
   }
 
-  @Get()
-  findAll() {
-    return this.pasajerosService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pasajerosService.findOne(+id);
+  obtenerPorId(@Param('id', ParseIntPipe) id: number): Pasajero {
+    return this.pasajerosService.obtenerPorId(id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updatePasajeroDto: UpdatePasajeroDto,
-  ) {
-    return this.pasajerosService.update(+id, updatePasajeroDto);
+  @Get()
+  obtenerTodos(): Pasajero[] {
+    return this.pasajerosService.obtenerTodos();
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pasajerosService.remove(+id);
+  eliminar(@Param('id', ParseIntPipe) id: number): void {
+    this.pasajerosService.eliminar(id);
+
   }
 }
