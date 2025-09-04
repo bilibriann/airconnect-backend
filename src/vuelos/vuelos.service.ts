@@ -4,6 +4,9 @@ import { UpdateVueloDto } from './dto/update-vuelo.dto';
 
 @Injectable()
 export class VuelosService {
+  obtenerPorId(vueloId: number) {
+    throw new Error('Method not implemented.');
+  }
   create(createVueloDto: CreateVueloDto) {
     return 'This action adds a new vuelo';
   }
