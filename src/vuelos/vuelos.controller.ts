@@ -12,6 +12,7 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VuelosService } from './vuelos.service';
 import { CreateVueloDto } from './dto/create-vuelo.dto';
 import { Vuelo } from './entities/vuelo.entity';
+import { UpdateEstadoVueloDto } from './dto/update-estado-vuelo.dto';
 
 @ApiTags('vuelos')
 @Controller('vuelos')
@@ -32,14 +33,14 @@ export class VuelosController {
   obtenerTodos(
     @Query('origen') origen: string,
     @Query('estado')
-    estado: 'Programado' | ' Aterrizado' | 'En Vuelo' | 'Cancelado',
-  ): Vuelo {
+    estado: 'Programado' | 'Aterrizado' | 'En vuelo' | 'Cancelado',
+  ): Vuelo[] {
     return this.vuelosService.obtenerTodos({ origen, estado });
   }
-  @Patch(':id/esado')
+  @Patch(':id/estado')
   actualizarEstado(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: ActualizarEstadoVueloDto,
+    @Body() dto: UpdateEstadoVueloDto,
   ): Vuelo {
     return this.vuelosService.actualizarEstado(id, dto);
   }

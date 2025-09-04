@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { Vuelo } from './entities/vuelo.entity';
 import { AeropuertosService } from '../aeropuertos/aeropuertos.service';
+import { CreateVueloDto } from './dto/create-vuelo.dto';
+import { UpdateEstadoVueloDto } from './dto/update-estado-vuelo.dto';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 @Injectable()
 export class VuelosService {
@@ -9,23 +15,23 @@ export class VuelosService {
 
   constructor(private readonly aeropuertosService: AeropuertosService) {}
 
-  private verificarAeropuertosExiste(codigo: string) {
-    const aeropuerto =
-      this.aeropuertosService.findByCodigo?.(codigo) ??
-      this.aeropuertosService.obtenerPorCodigo?.(codigo);
+  private verificarAeropuertoExiste(codigo: string) {
+    const aeropuerto = this.aeropuertosService
+      .obtenerTodosLosAeropuertos()
+      .find((a) => a.codigo === codigo);
     if (!aeropuerto) {
-      throw new Error(`Aeropuerto con código ${codigo} no existe`);
+      throw new NotFoundException(`Aeropuerto con código ${codigo} no existe`);
     }
   }
 
-  create(dto: CrearVueloDto): Vuelo {
+  create(dto: CreateVueloDto): Vuelo {
     if (dto.origen === dto.destino) {
-      throw new Error(
+      throw new BadRequestException(
         'El aeropuerto de origen y destino no pueden ser iguales',
       );
     }
-    this.verificarAeropuertosExiste(dto.origen);
-    this.verificarAeropuertosExiste(dto.destino);
+    this.verificarAeropuertoExiste(dto.origen);
+    this.verificarAeropuertoExiste(dto.destino);
 
     const nuevoVuelo: Vuelo = {
       id: this.contadorId++,
@@ -34,7 +40,7 @@ export class VuelosService {
       duracionEstimada: dto.duracionEstimada,
       origen: dto.origen,
       destino: dto.destino,
-      estado: dto.estado || 'programado',
+      estado: dto.estado || 'Programado',
     };
     this.vuelos.push(nuevoVuelo);
     return nuevoVuelo;
@@ -59,7 +65,7 @@ export class VuelosService {
     });
   }
 
-  actualizarEstado(id: number, dto: ActualizarEstadoVueloDto): Vuelo {
+  actualizarEstado(id: number, dto: UpdateEstadoVueloDto): Vuelo {
     const vuelo = this.obtenerPorId(id);
     vuelo.estado = dto.estado;
     return vuelo;
